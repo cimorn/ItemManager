@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "name": "Storage",
+    "createdAt": "2026-04-02T16:06:46.848Z",
+    "updatedAt": "2026-07-01T11:55:32.038Z",
+    "appVersion": "26.03.30",
+    "recentImports": [],
+    "recentExports": [
+      {
+        "filePath": "C:\\Users\\cimorn\\Desktop\\Project\\物品管理\\data\\exports\\Storage.xlsx",
+        "exportedAt": "2026-05-19T10:11:49.696Z"
+      }
+    ],
+    "tagPrefixes": {}
+  },
+  "categories": [
+    {
+      "id": "cat_dd09d4a8-9c68-485c-93a4-aea8cc2c2907",
+      "name": "服装",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-04-02T16:06:50.296Z",
+      "updatedAt": "2026-04-02T16:06:57.637Z"
+    },
+    {
+      "id": "cat_5150fc24-ce80-4f43-866f-bf2c6d278919",
+      "name": "鞋子",
+      "level": 2,
+      "parentId": "cat_dd09d4a8-9c68-485c-93a4-aea8cc2c2907",
+      "createdAt": "2026-04-02T16:07:01.352Z",
+      "updatedAt": "2026-04-02T16:07:03.183Z"
+    },
+    {
+      "id": "cat_6f9e9cd3-ced3-401b-9e8b-7691b9a2034f",
+      "name": "数码",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-04-02T16:07:04.939Z",
+      "updatedAt": "2026-04-02T16:07:10.181Z"
+    },
+    {
+      "id": "cat_37c5b419-e9a5-4eec-893e-1f3fef5383d9",
+      "name": "设备",
+      "level": 2,
+      "parentId": "cat_6f9e9cd3-ced3-401b-9e8b-7691b9a2034f",
+      "createdAt": "2026-04-02T16:07:11.219Z",
+      "updatedAt": "2026-04-02T16:07:13.287Z"
+    },
+    {
+      "id": "cat_b8727b25-f722-40f7-b61e-5f2d78a52a3f",
+      "name": "存储",
+      "level": 2,
+      "parentId": "cat_6f9e9cd3-ced3-401b-9e8b-7691b9a2034f",
+      "createdAt": "2026-04-02T16:16:22.984Z",
+      "updatedAt": "2026-04-02T16:16:25.020Z"
+    }
+  ],
+  "locations": [
+    {
+      "id": "loc_35eb629d-b91b-4c03-8381-661d5b8c2361",
+      "name": "日常",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-04-02T16:07:29.453Z",
+      "updatedAt": "2026-04-02T16:07:31.541Z"
+    },
+    {
+      "id": "loc_168beecf-358c-47b1-8196-fb0d15f1455f",
+      "name": "325",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-04-02T16:08:28.079Z",
+      "updatedAt": "2026-04-02T16:08:39.753Z"
+    },
+    {
+      "id": "loc_66736fbc-4588-4d1b-bea8-f78dbbd4fb52",
+      "name": "NAS",
+      "level": 2,
+      "parentId": "loc_168beecf-358c-47b1-8196-fb0d15f1455f",
+      "createdAt": "2026-04-02T16:08:40.632Z",
+      "updatedAt": "2026-04-02T16:08:45.606Z"
+    },
+    {
+      "id": "loc_0ad180a8-6ed4-4fe6-b959-618327c5ba0f",
+      "name": "桌下",
+      "level": 2,
+      "parentId": "loc_168beecf-358c-47b1-8196-fb0d15f1455f",
+      "createdAt": "2026-04-02T16:08:53.483Z",
+      "updatedAt": "2026-04-02T16:08:56.840Z"
+    }
+  ],
+  "items": [
+    {
+      "id": "item_878e8abb-62c4-4192-bf12-57a657dc9fd4",
+      "code": "",
+      "name": "板鞋",
+      "brand": "Champion",
+      "categoryId": "cat_5150fc24-ce80-4f43-866f-bf2c6d278919",
+      "categoryPath": "服装 / 鞋子",
+      "locationId": "loc_35eb629d-b91b-4c03-8381-661d5b8c2361",
+      "locationPath": "日常",
+      "imagePath": "images/服装/鞋子/服装-鞋子-260403-000738.jpeg",
+      "quantity": "1双",
+      "specification": "44码",
+      "notes": "💗",
+      "tags": []
+    },
+    {
+      "id": "item_0dfc29f7-bcde-429f-b711-bb9eb075b56c",
+      "code": "",
+      "name": "NAS",
+      "brand": "绿联云",
+      "categoryId": "cat_37c5b419-e9a5-4eec-893e-1f3fef5383d9",
+      "categoryPath": "数码 / 设备",
+      "locationId": "loc_0ad180a8-6ed4-4fe6-b959-618327c5ba0f",
+      "locationPath": "325 / 桌下",
+      "imagePath": "images/数码/设备/数码-设备-260403-000955.jpeg",
+      "quantity": "1个",
+      "specification": "四盘8G",
+      "notes": "DH4300 Plus",
+      "tags": []
+    },
+    {
+      "id": "item_4a31c746-caeb-4900-ae52-ce0dd112ee64",
+      "code": "",
+      "name": "键盘",
+      "brand": "Apple",
+      "categoryId": "cat_37c5b419-e9a5-4eec-893e-1f3fef5383d9",
+      "categoryPath": "数码 / 设备",
+      "locationId": "loc_35eb629d-b91b-4c03-8381-661d5b8c2361",
+      "locationPath": "日常",
+      "imagePath": "images/数码/设备/数码-设备-260403-001107.jpeg",
+      "quantity": "1个",
+      "specification": "蓝牙",
+      "notes": "USB-C",
+      "tags": []
+    },
+    {
+      "id": "item_84c4e99c-8d92-4896-a481-5fefe2b2ef93",
+      "code": "",
+      "name": "手柄",
+      "brand": "飞智",
+      "categoryId": "cat_37c5b419-e9a5-4eec-893e-1f3fef5383d9",
+      "categoryPath": "数码 / 设备",
+      "locationId": "loc_0ad180a8-6ed4-4fe6-b959-618327c5ba0f",
+      "locationPath": "325 / 桌下",
+      "imagePath": "images/数码/设备/数码-设备-260403-001328.jpeg",
+      "quantity": "1个",
+      "specification": "蓝牙",
+      "notes": "冰原狼2代",
+      "tags": []
+    },
+    {
+      "id": "item_273079a8-2ab4-4ef5-a936-31cc3fd56484",
+      "code": "",
+      "name": "机械硬盘",
+      "brand": "西部数据",
+      "categoryId": "cat_b8727b25-f722-40f7-b61e-5f2d78a52a3f",
+      "categoryPath": "数码 / 存储",
+      "locationId": "loc_66736fbc-4588-4d1b-bea8-f78dbbd4fb52",
+      "locationPath": "325 / NAS",
+      "imagePath": "images/数码/存储/数码-存储-260403-001656.png",
+      "quantity": "1个",
+      "specification": "4T",
+      "notes": "Red plus",
+      "tags": []
+    },
+    {
+      "id": "item_571c9df9-3aeb-4530-b787-b82046f22921",
+      "code": "",
+      "name": "机械硬盘",
+      "brand": "西部数据",
+      "categoryId": "cat_b8727b25-f722-40f7-b61e-5f2d78a52a3f",
+      "categoryPath": "数码 / 存储",
+      "locationId": "loc_66736fbc-4588-4d1b-bea8-f78dbbd4fb52",
+      "locationPath": "325 / NAS",
+      "imagePath": "images/数码/存储/数码-存储-260403-001727.jpg",
+      "quantity": "1个",
+      "specification": "4T",
+      "notes": "Blue",
+      "tags": []
+    }
+  ]
+}

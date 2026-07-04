@@ -1,0 +1,34 @@
+[
+  {
+    "id": "loc_35eb629d-b91b-4c03-8381-661d5b8c2361",
+    "name": "日常",
+    "level": 1,
+    "parentId": null,
+    "createdAt": "2026-04-02T16:07:29.453Z",
+    "updatedAt": "2026-04-02T16:07:31.541Z"
+  },
+  {
+    "id": "loc_168beecf-358c-47b1-8196-fb0d15f1455f",
+    "name": "325",
+    "level": 1,
+    "parentId": null,
+    "createdAt": "2026-04-02T16:08:28.079Z",
+    "updatedAt": "2026-04-02T16:08:39.753Z"
+  },
+  {
+    "id": "loc_66736fbc-4588-4d1b-bea8-f78dbbd4fb52",
+    "name": "NAS",
+    "level": 2,
+    "parentId": "loc_168beecf-358c-47b1-8196-fb0d15f1455f",
+    "createdAt": "2026-04-02T16:08:40.632Z",
+    "updatedAt": "2026-04-02T16:08:45.606Z"
+  },
+  {
+    "id": "loc_0ad180a8-6ed4-4fe6-b959-618327c5ba0f",
+    "name": "桌下",
+    "level": 2,
+    "parentId": "loc_168beecf-358c-47b1-8196-fb0d15f1455f",
+    "createdAt": "2026-04-02T16:08:53.483Z",
+    "updatedAt": "2026-04-02T16:08:56.840Z"
+  }
+]

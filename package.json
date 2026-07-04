@@ -1,0 +1,80 @@
+{
+  "name": "item-manager",
+  "version": "26.03.30",
+  "description": "物品管理工具",
+  "packageManager": "pnpm@11.7.0",
+  "main": "electron/main.js",
+  "author": "Codex",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cimorn/ItemManager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cimorn/ItemManager/issues"
+  },
+  "homepage": "https://github.com/cimorn/ItemManager#readme",
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"wait-on tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .\"",
+    "web:dev": "concurrently -k \"vite --host 0.0.0.0\" \"cross-env PORT=4173 node server/index.js\"",
+    "web:start": "node server/index.js",
+    "web:public": "node scripts/start-public-url.js",
+    "db:reset": "node scripts/reset-mongodb.js",
+    "build": "vite build --outDir dist/renderer",
+    "test": "vitest run",
+    "desktop": "electron .",
+    "build:desktop": "npm run build && node node_modules/electron/install.js && electron-builder --win zip && node electron/flatten-dist.js"
+  },
+  "build": {
+    "appId": "life.mcj.webstorage",
+    "productName": "物品管理",
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "dist/desktop"
+    },
+    "win": {
+      "icon": "assets/app-icon.ico",
+      "signAndEditExecutable": true
+    },
+    "extraFiles": [
+      {
+        "from": "data",
+        "to": "data",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "files": [
+      "assets/**/*",
+      "electron/**/*",
+      "dist/renderer/**/*",
+      "src/main/**/*",
+      "package.json"
+    ]
+  },
+  "dependencies": {
+    "@zxing/browser": "^0.2.0",
+    "express": "^5.2.1",
+    "localtunnel": "^2.0.2",
+    "mongodb": "^7.3.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "xlsx": "^0.18.5",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1",
+    "jsdom": "^29.0.1",
+    "vite": "^8.0.1",
+    "vitest": "^4.1.0",
+    "wait-on": "^9.0.4"
+  }
+}

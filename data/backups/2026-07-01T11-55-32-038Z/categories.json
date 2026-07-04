@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cat_dd09d4a8-9c68-485c-93a4-aea8cc2c2907",
+    "name": "服装",
+    "level": 1,
+    "parentId": null,
+    "createdAt": "2026-04-02T16:06:50.296Z",
+    "updatedAt": "2026-04-02T16:06:57.637Z"
+  },
+  {
+    "id": "cat_5150fc24-ce80-4f43-866f-bf2c6d278919",
+    "name": "鞋子",
+    "level": 2,
+    "parentId": "cat_dd09d4a8-9c68-485c-93a4-aea8cc2c2907",
+    "createdAt": "2026-04-02T16:07:01.352Z",
+    "updatedAt": "2026-04-02T16:07:03.183Z"
+  },
+  {
+    "id": "cat_6f9e9cd3-ced3-401b-9e8b-7691b9a2034f",
+    "name": "数码",
+    "level": 1,
+    "parentId": null,
+    "createdAt": "2026-04-02T16:07:04.939Z",
+    "updatedAt": "2026-04-02T16:07:10.181Z"
+  },
+  {
+    "id": "cat_37c5b419-e9a5-4eec-893e-1f3fef5383d9",
+    "name": "设备",
+    "level": 2,
+    "parentId": "cat_6f9e9cd3-ced3-401b-9e8b-7691b9a2034f",
+    "createdAt": "2026-04-02T16:07:11.219Z",
+    "updatedAt": "2026-04-02T16:07:13.287Z"
+  },
+  {
+    "id": "cat_b8727b25-f722-40f7-b61e-5f2d78a52a3f",
+    "name": "存储",
+    "level": 2,
+    "parentId": "cat_6f9e9cd3-ced3-401b-9e8b-7691b9a2034f",
+    "createdAt": "2026-04-02T16:16:22.984Z",
+    "updatedAt": "2026-04-02T16:16:25.020Z"
+  }
+]

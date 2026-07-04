@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Demo cleaning brush">
+  <rect width="320" height="240" fill="#f7fbfa"/>
+  <rect x="86" y="92" width="148" height="28" rx="14" fill="#1f7a78"/>
+  <rect x="210" y="82" width="42" height="48" rx="12" fill="#f2c66d"/>
+  <g stroke="#6f8790" stroke-width="5" stroke-linecap="round">
+    <path d="M220 132v42"/>
+    <path d="M232 132v46"/>
+    <path d="M244 132v42"/>
+    <path d="M256 132v34"/>
+  </g>
+  <circle cx="104" cy="106" r="7" fill="#ffffff"/>
+</svg>

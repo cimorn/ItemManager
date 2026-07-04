@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Demo label printer">
+  <rect width="320" height="240" fill="#f6fbff"/>
+  <rect x="58" y="68" width="204" height="112" rx="22" fill="#1c75a6"/>
+  <rect x="88" y="96" width="144" height="42" rx="8" fill="#ffffff"/>
+  <rect x="108" y="112" width="52" height="7" rx="3" fill="#86b8cf"/>
+  <rect x="108" y="126" width="82" height="7" rx="3" fill="#86b8cf"/>
+  <circle cx="230" cy="154" r="10" fill="#f4c95d"/>
+  <rect x="72" y="182" width="176" height="18" rx="9" fill="#d8edf7"/>
+</svg>
