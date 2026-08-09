@@ -1,0 +1,67 @@
+﻿:root {
+  color-scheme: light;
+  font-family: "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --bg: #eef2f5;
+  --bg-strong: #ffffff;
+  --panel: rgba(255, 255, 255, 0.88);
+  --panel-strong: #ffffff;
+  --panel-muted: #f6f8f7;
+  --border: rgba(33, 47, 57, 0.12);
+  --border-strong: rgba(33, 47, 57, 0.22);
+  --text: #172026;
+  --text-soft: #64717d;
+  --accent: #0f766e;
+  --accent-strong: #0b5f59;
+  --accent-soft: rgba(15, 118, 110, 0.12);
+  --accent-blue: #2f6f9f;
+  --accent-blue-soft: rgba(47, 111, 159, 0.12);
+  --accent-warm: #d97706;
+  --accent-warm-soft: rgba(217, 119, 6, 0.12);
+  --danger: #b42318;
+  --danger-soft: rgba(180, 35, 24, 0.1);
+  --shadow-lg: 0 24px 54px rgba(23, 32, 38, 0.14);
+  --shadow-md: 0 14px 30px rgba(23, 32, 38, 0.1);
+  --shadow-sm: 0 8px 18px rgba(23, 32, 38, 0.07);
+  --radius-xl: 8px;
+  --radius-lg: 8px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: linear-gradient(180deg, #eef2f5 0%, #f8fafb 44%, #eef4f1 100%);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  color: #ffffff;
+  background: var(--accent);
+}
+
+
+
+

@@ -1,0 +1,174 @@
+{
+  "meta": {
+    "name": "Demo Items",
+    "createdAt": "2026-07-05T00:00:00.000Z",
+    "updatedAt": "2026-07-05T00:00:00.000Z",
+    "appVersion": "26.03.30",
+    "recentImports": [],
+    "recentExports": [],
+    "tagPrefixes": {
+      "demo_cat_office": "BG",
+      "demo_cat_tool": "GJ",
+      "demo_cat_storage": "SN"
+    }
+  },
+  "categories": [
+    {
+      "id": "demo_cat_office",
+      "name": "办公",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_cat_stationery",
+      "name": "文具",
+      "level": 2,
+      "parentId": "demo_cat_office",
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_cat_storage",
+      "name": "收纳",
+      "level": 2,
+      "parentId": "demo_cat_office",
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_cat_tool",
+      "name": "工具",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_cat_maintenance",
+      "name": "维护",
+      "level": 2,
+      "parentId": "demo_cat_tool",
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    }
+  ],
+  "locations": [
+    {
+      "id": "demo_loc_study",
+      "name": "书房",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_loc_shelf",
+      "name": "书架",
+      "level": 2,
+      "parentId": "demo_loc_study",
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_loc_top",
+      "name": "上层",
+      "level": 3,
+      "parentId": "demo_loc_shelf",
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_loc_cabinet",
+      "name": "工具柜",
+      "level": 1,
+      "parentId": null,
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_loc_drawer",
+      "name": "抽屉",
+      "level": 2,
+      "parentId": "demo_loc_cabinet",
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    },
+    {
+      "id": "demo_loc_slot",
+      "name": "一号格",
+      "level": 3,
+      "parentId": "demo_loc_drawer",
+      "createdAt": "2026-07-05T00:00:00.000Z",
+      "updatedAt": "2026-07-05T00:00:00.000Z"
+    }
+  ],
+  "items": [
+    {
+      "id": "demo_item_label_printer",
+      "code": "",
+      "name": "标签机",
+      "brand": "Demo",
+      "categoryId": "demo_cat_stationery",
+      "categoryPath": "办公 / 文具",
+      "locationId": "demo_loc_top",
+      "locationPath": "书房 / 书架 / 上层",
+      "imagePath": "images/办公/文具/demo-label-printer.svg",
+      "quantity": "1台",
+      "specification": "D30",
+      "notes": "演示",
+      "tags": ["BG-001"]
+    },
+    {
+      "id": "demo_item_box",
+      "code": "",
+      "name": "收纳盒",
+      "brand": "Demo",
+      "categoryId": "demo_cat_storage",
+      "categoryPath": "办公 / 收纳",
+      "locationId": "demo_loc_shelf",
+      "locationPath": "书房 / 书架",
+      "imagePath": "images/办公/收纳/demo-storage-box.svg",
+      "quantity": "2个",
+      "specification": "透明",
+      "notes": "",
+      "tags": ["SN-002"]
+    },
+    {
+      "id": "demo_item_screwdriver",
+      "code": "",
+      "name": "螺丝刀套装",
+      "brand": "Demo",
+      "categoryId": "demo_cat_maintenance",
+      "categoryPath": "工具 / 维护",
+      "locationId": "demo_loc_slot",
+      "locationPath": "工具柜 / 抽屉 / 一号格",
+      "imagePath": "images/工具/维护/demo-screwdriver.svg",
+      "quantity": "1套",
+      "specification": "十字",
+      "notes": "",
+      "tags": ["GJ-003"]
+    },
+    {
+      "id": "demo_item_brush",
+      "code": "",
+      "name": "清洁刷",
+      "brand": "Demo",
+      "categoryId": "demo_cat_maintenance",
+      "categoryPath": "工具 / 维护",
+      "locationId": "demo_loc_drawer",
+      "locationPath": "工具柜 / 抽屉",
+      "imagePath": "images/工具/维护/demo-brush.svg",
+      "quantity": "3把",
+      "specification": "小号",
+      "notes": "",
+      "tags": ["GJ-004"]
+    }
+  ],
+  "paths": {
+    "projectDir": "",
+    "imagesDir": "",
+    "exportsDir": ""
+  }
+}

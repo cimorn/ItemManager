@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Demo storage box">
+  <rect width="320" height="240" fill="#f8fbf8"/>
+  <rect x="68" y="56" width="184" height="140" rx="16" fill="#dfeee9" stroke="#1a8a82" stroke-width="8"/>
+  <rect x="92" y="82" width="136" height="34" rx="10" fill="#ffffff"/>
+  <rect x="104" y="94" width="78" height="8" rx="4" fill="#92b8b2"/>
+  <path d="M78 138h164" stroke="#85b7b0" stroke-width="8" stroke-linecap="round"/>
+  <rect x="120" y="150" width="80" height="18" rx="9" fill="#f3c467"/>
+</svg>

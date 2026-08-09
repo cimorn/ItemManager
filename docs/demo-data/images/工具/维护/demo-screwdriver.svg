@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Demo screwdriver set">
+  <rect width="320" height="240" fill="#fffaf1"/>
+  <rect x="84" y="66" width="38" height="128" rx="19" fill="#f0a24a"/>
+  <rect x="96" y="34" width="14" height="58" rx="7" fill="#6a7b86"/>
+  <rect x="148" y="66" width="38" height="128" rx="19" fill="#2f6f9f"/>
+  <rect x="160" y="34" width="14" height="58" rx="7" fill="#6a7b86"/>
+  <rect x="212" y="66" width="38" height="128" rx="19" fill="#168b82"/>
+  <rect x="224" y="34" width="14" height="58" rx="7" fill="#6a7b86"/>
+  <rect x="70" y="198" width="196" height="12" rx="6" fill="#e8d8bd"/>
+</svg>
