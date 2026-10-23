@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { applyItemGalleryFilters } from '../../src/renderer/features/items/item-gallery-selectors';
+import { applyItemGalleryFilters, buildItemCardView } from '../../src/renderer/features/items/item-gallery-selectors';
 
 const categories = [{ id: 'cat_clothes', name: '服装', level: 1, parentId: null }];
 
@@ -44,5 +44,17 @@ describe('applyItemGalleryFilters', () => {
     ]);
 
     expect(applyItemGalleryFilters(items, categories, locations, { locationId: 'loc_box' }).map((item) => item.id)).toEqual(['item_grandchild']);
+  });
+});
+
+
+describe('card quantity display', () => {
+  it.each(['1', 1, ' 1 '])('hides a single item (%j) without changing its saved quantity', quantity => {
+    const card = buildItemCardView({ name: 'T恤', brand: '品牌', specification: '印花·镂空', quantity });
+    expect(card.metaLine).toBe('品牌 · 印花·镂空');
+    expect(card.quantity).toBe(quantity);
+  });
+  it.each(['2', '12', '1件', ''])('keeps other quantity text (%j)', quantity => {
+    expect(buildItemCardView({ brand: '品牌', quantity }).metaLine).toBe(quantity ? '品牌 · ' + quantity : '品牌');
   });
 });

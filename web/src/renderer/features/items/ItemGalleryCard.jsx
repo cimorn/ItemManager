@@ -33,7 +33,7 @@ export default function ItemGalleryCard({ item, bulkMode = false, bulkSelected =
           <strong>{item.title}</strong>
           {item.note ? <span className="item-gallery-card__note">{item.note}</span> : null}
         </div>
-        <div className="item-gallery-card__meta-row">{item.metaLine || '未填写品牌、规格和数量'}</div>
+        <div className="item-gallery-card__meta-row">{item.metaLine || '未填写品牌或款式'}</div>
         <div className="item-gallery-card__storage-row" aria-label={`${item.title} 存放位置和标签`}>
           <span className="item-gallery-card__location-row">{item.locationLine}</span>
           {item.tags?.length ? (

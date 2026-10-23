@@ -28,7 +28,7 @@ export default function Toolbar({
       </div>
 
       <label className="toolbar-search toolbar-search--between-sides" aria-label="搜索物品">
-        <input value={search} onChange={(event) => onSearch?.(event.target.value)} placeholder="搜索名称、备注、品牌" />
+        <input value={search} onChange={(event) => onSearch?.(event.target.value)} placeholder="搜索名称、规格、款式、品牌" />
       </label>
 
       {contextualMode ? (

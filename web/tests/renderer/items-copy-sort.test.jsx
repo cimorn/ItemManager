@@ -89,11 +89,11 @@ describe('copy a saved item into a new draft', () => {
     const { user, onSaveItem } = setup();
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     await user.click(screen.getByRole('button', { name: source.name, exact: true }));
-    await user.clear(screen.getByLabelText('备注'));
-    await user.type(screen.getByLabelText('备注'), '尚未保存');
+    await user.clear(screen.getByLabelText('规格'));
+    await user.type(screen.getByLabelText('规格'), '尚未保存');
     await user.click(screen.getByRole('button', { name: '复制新增', exact: true }));
     expect(window.confirm).toHaveBeenCalledTimes(1);
-    expect(screen.getByLabelText('备注')).toHaveValue(source.notes);
+    expect(screen.getByLabelText('规格')).toHaveValue(source.notes);
     expect(onSaveItem).not.toHaveBeenCalled();
   });
 

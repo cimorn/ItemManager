@@ -35,6 +35,21 @@ function editor(initialItem = item, extra = {}) {
 const locationRow = number => within(screen.getByRole('group', { name: `存放位置 ${number}` }));
 
 describe('compact NAS item controls', () => {
+  it('keeps existing field values under the renamed specification and style controls', async () => {
+    const { user, onSave } = editor({ ...item, notes: '白色·S', specification: '印花·镂空', quantity: '1' });
+    expect(screen.getByLabelText('规格')).toHaveValue('白色·S');
+    expect(screen.getByLabelText('规格')).toHaveAttribute('placeholder', '白色·S');
+    expect(screen.getByLabelText('款式')).toHaveValue('印花·镂空');
+    expect(screen.getByLabelText('款式')).toHaveAttribute('placeholder', '印花·镂空');
+    expect(screen.getByLabelText('数量')).toHaveValue('1');
+    await user.clear(screen.getByLabelText('规格'));
+    await user.type(screen.getByLabelText('规格'), '黑色·M');
+    await user.clear(screen.getByLabelText('款式'));
+    await user.type(screen.getByLabelText('款式'), '纯色');
+    await user.click(screen.getByRole('button', { name: '保存', exact: true }));
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ notes: '黑色·M', specification: '纯色', quantity: '1' }));
+  });
+
   it('offers one ordinary file selector with privacy and packaging controls and puts tags last', async () => {
     const { container, user, onSave } = editor();
     expect(screen.queryByRole('button', { name: '手机拍照' })).not.toBeInTheDocument();

@@ -210,7 +210,7 @@ describe('password gated browser inventory', () => {
     await waitFor(() => expect(URL.createObjectURL).toHaveBeenCalled());
     await user.click(screen.getByRole('button', { name: '隐藏物品' }));
     expect(within(screen.getByRole('dialog')).getByLabelText('隐私区')).toBeChecked();
-    await user.type(within(screen.getByRole('dialog')).getByLabelText('备注'), '秘密草稿');
+    await user.type(within(screen.getByRole('dialog')).getByLabelText('规格'), '秘密草稿');
     act(() => useProjectStore.getState().setSearch('隐藏'));
     await user.click(screen.getByRole('button', { name: '物品管理', exact: true }));
     await screen.findByRole('button', { name: '普通物品' });
@@ -351,10 +351,10 @@ describe('password gated browser inventory', () => {
     render(<WebApp fetchImpl={fetchImpl} />);
     await user.click(await screen.findByRole('button', { name: '普通物品' }));
     const dialog = screen.getByRole('dialog');
-    await user.type(within(dialog).getByLabelText('备注'), '保留弹窗草稿');
+    await user.type(within(dialog).getByLabelText('规格'), '保留弹窗草稿');
     await user.click(within(dialog).getByRole('button', { name: '保存', exact: true }));
     expect(await screen.findByRole('alert')).toHaveTextContent('其他设备');
-    expect(within(screen.getByRole('dialog')).getByLabelText('备注')).toHaveValue('保留弹窗草稿');
+    expect(within(screen.getByRole('dialog')).getByLabelText('规格')).toHaveValue('保留弹窗草稿');
     expect(useProjectStore.getState().currentProject.items[0].notes).not.toBe('保留弹窗草稿');
     expect(fetchImpl.mock.calls.filter(([url, init]) => url === '/api/project' && init.method === 'PUT')).toHaveLength(1);
   });

@@ -159,10 +159,10 @@ describe('NAS editor deferred image upload', () => {
     const uploadImage = vi.fn().mockRejectedValueOnce(new Error('上传断开')).mockResolvedValueOnce({ imageId: 'retry-image' });
     const { onSave } = setup({ api: { uploadImage } });
     await selectPhoto(user);
-    await user.type(screen.getByLabelText('备注'), '保留这段草稿');
+    await user.type(screen.getByLabelText('规格'), '保留这段草稿');
     await user.click(screen.getByRole('button', { name: '保存' }));
     expect(await screen.findByText('上传断开')).toBeInTheDocument();
-    expect(screen.getByLabelText('备注')).toHaveValue('保留这段草稿');
+    expect(screen.getByLabelText('规格')).toHaveValue('保留这段草稿');
     expect(screen.getByText('相册照片.png')).toBeInTheDocument();
     expect(onSave).not.toHaveBeenCalled();
     await user.click(screen.getByRole('button', { name: '保存' }));
@@ -222,12 +222,12 @@ describe('NAS editor deferred image upload', () => {
   it('preserves a dirty draft and selected File when the same record and catalogs refresh', async () => {
     const user = userEvent.setup();
     const { api, onSave, rerenderEditor } = setup();
-    await user.type(screen.getByLabelText('备注'), '不能被项目刷新覆盖');
+    await user.type(screen.getByLabelText('规格'), '不能被项目刷新覆盖');
     await selectPhoto(user);
     rerenderEditor({ item: { ...item, name: '服务器更新的名称' }, categories: categories.map((category) => ({ ...category })), locations: [...locations] });
 
     expect(screen.getByLabelText('名称')).toHaveValue('标签机');
-    expect(screen.getByLabelText('备注')).toHaveValue('不能被项目刷新覆盖');
+    expect(screen.getByLabelText('规格')).toHaveValue('不能被项目刷新覆盖');
     expect(screen.getByText('相册照片.png')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: '保存' }));
     await waitFor(() => expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ name: '标签机', notes: '不能被项目刷新覆盖', imagePath: 'staged-image' })));
@@ -238,15 +238,15 @@ describe('NAS editor deferred image upload', () => {
     const user = userEvent.setup();
     const upload = deferred();
     const { api, onSave, rerenderEditor } = setup({ api: { uploadImage: vi.fn(() => upload.promise) } });
-    await user.type(screen.getByLabelText('备注'), '上传时保留');
+    await user.type(screen.getByLabelText('规格'), '上传时保留');
     await selectPhoto(user);
     await user.click(screen.getByRole('button', { name: '保存' }));
     await waitFor(() => expect(api.uploadImage).toHaveBeenCalledTimes(1));
     rerenderEditor({ item: { ...item }, categories: categories.map((category) => ({ ...category })), locations: [...locations] });
 
-    expect(screen.getByLabelText('备注')).toHaveValue('上传时保留');
+    expect(screen.getByLabelText('规格')).toHaveValue('上传时保留');
     expect(screen.getByText('相册照片.png')).toBeInTheDocument();
-    expect(screen.getByLabelText('备注')).toBeDisabled();
+    expect(screen.getByLabelText('规格')).toBeDisabled();
     expect(screen.getByRole('button', { name: '保存中...' })).toBeDisabled();
     expect(screen.getByRole('button', { name: '取消' })).toBeDisabled();
     await act(async () => upload.resolve({ imageId: 'refreshed-upload' }));
@@ -271,14 +271,14 @@ describe('NAS editor deferred image upload', () => {
     const user = userEvent.setup();
     const upload = deferred();
     const { api, onSave, rerenderEditor } = setup({ api: { uploadImage: vi.fn(() => upload.promise) } });
-    await user.type(screen.getByLabelText('备注'), '上一个物品的草稿');
+    await user.type(screen.getByLabelText('规格'), '上一个物品的草稿');
     await selectPhoto(user);
     await user.click(screen.getByRole('button', { name: '保存' }));
     await waitFor(() => expect(api.uploadImage).toHaveBeenCalledTimes(1));
     rerenderEditor({ item: { ...item, id: 'item-2', name: '第二个物品' } });
     expect(screen.getByLabelText('名称')).toHaveValue('第二个物品');
-    expect(screen.getByLabelText('备注')).toHaveValue('');
-    expect(screen.getByLabelText('备注')).toBeEnabled();
+    expect(screen.getByLabelText('规格')).toHaveValue('');
+    expect(screen.getByLabelText('规格')).toBeEnabled();
     expect(screen.queryByText('相册照片.png')).not.toBeInTheDocument();
     await act(async () => upload.resolve({ imageId: 'old-record-upload' }));
     expect(onSave).not.toHaveBeenCalled();

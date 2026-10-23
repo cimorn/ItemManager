@@ -353,8 +353,8 @@ export default function ItemEditorModal({
                 <input autoFocus value={draft.name} onChange={(event) => updateDraft({ name: event.target.value })} />
               </label>
               <label className="field">
-                <span>备注</span>
-                <input value={draft.notes} onChange={(event) => updateDraft({ notes: event.target.value })} />
+                <span>规格</span>
+                <input placeholder="白色·S" value={draft.notes} onChange={(event) => updateDraft({ notes: event.target.value })} />
               </label>
             </div>
 
@@ -364,8 +364,8 @@ export default function ItemEditorModal({
                 <input value={draft.brand} onChange={(event) => updateDraft({ brand: event.target.value })} />
               </label>
               <label className="field">
-                <span>规格</span>
-                <input value={draft.specification} onChange={(event) => updateDraft({ specification: event.target.value })} />
+                <span>款式</span>
+                <input placeholder="印花·镂空" value={draft.specification} onChange={(event) => updateDraft({ specification: event.target.value })} />
               </label>
               <label className="field">
                 <span>数量</span>
