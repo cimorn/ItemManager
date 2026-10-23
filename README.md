@@ -1,4 +1,4 @@
-# 物品管理
+# Storage
 
 [English](README.en.md)
 
@@ -9,8 +9,8 @@
 ## 部署
 
 ```sh
-git clone https://github.com/cimorn/ItemManager.git
-cd ItemManager
+git clone https://github.com/cimorn/Storage.git
+cd Storage
 cp .env.example .env
 ```
 

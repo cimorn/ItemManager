@@ -1,4 +1,4 @@
-# Item Manager
+# Storage
 
 [中文](README.md)
 
@@ -9,8 +9,8 @@ Runs on Linux servers, Docker Desktop, and NAS devices. Images support `amd64` a
 ## Deploy
 
 ```sh
-git clone https://github.com/cimorn/ItemManager.git
-cd ItemManager
+git clone https://github.com/cimorn/Storage.git
+cd Storage
 cp .env.example .env
 ```
 
