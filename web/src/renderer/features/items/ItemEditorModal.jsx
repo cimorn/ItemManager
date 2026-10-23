@@ -10,7 +10,7 @@ import {
   isItemPrivate,
   normalizeTagCodes
 } from '../../lib/project-data';
-import { normalizeItemDetail } from './item-detail-text';
+import { normalizeItemDetailInput } from './item-detail-text';
 import { createEmptyItemDraft } from './item-gallery-selectors';
 import { useImageAccess } from '../web/ImageAccessContext';
 
@@ -21,9 +21,9 @@ function normalizeItem(item, categories, locations, mode = 'edit') {
       barcode: item.barcode || item.code || '',
       code: item.barcode || item.code || '',
       name: item.name || '',
-      notes: item.notes || '',
+      notes: normalizeItemDetailInput(item.notes),
       brand: item.brand || '',
-      specification: item.specification || '',
+      specification: normalizeItemDetailInput(item.specification),
       quantity: item.quantity || '',
       categoryId: item.categoryId || '',
       locationId: item.locationId || '',
@@ -237,8 +237,8 @@ export default function ItemEditorModal({
     const nextItem = {
       ...(mode === 'copy' ? {} : item),
       ...draft,
-      notes: normalizeItemDetail(draft.notes),
-      specification: normalizeItemDetail(draft.specification),
+      notes: normalizeItemDetailInput(draft.notes),
+      specification: normalizeItemDetailInput(draft.specification),
       locationIds: assignedLocationIds,
       locationId: assignedLocationIds[0] || null,
       tags: normalizeTagCodes(draft.tags)
@@ -357,7 +357,7 @@ export default function ItemEditorModal({
               </label>
               <label className="field">
                 <span>规格</span>
-                <input placeholder="白色·S" value={draft.notes} onChange={(event) => updateDraft({ notes: event.target.value })} onBlur={(event) => { const notes = normalizeItemDetail(event.target.value); if (notes !== draft.notes) updateDraft({ notes }); }} />
+                <input placeholder="白色 S" value={draft.notes} onChange={(event) => updateDraft({ notes: event.target.value })} onBlur={(event) => { const notes = normalizeItemDetailInput(event.target.value); if (notes !== draft.notes) updateDraft({ notes }); }} />
               </label>
             </div>
 
@@ -368,7 +368,7 @@ export default function ItemEditorModal({
               </label>
               <label className="field">
                 <span>款式</span>
-                <input placeholder="印花·镂空" value={draft.specification} onChange={(event) => updateDraft({ specification: event.target.value })} onBlur={(event) => { const specification = normalizeItemDetail(event.target.value); if (specification !== draft.specification) updateDraft({ specification }); }} />
+                <input placeholder="印花 镂空" value={draft.specification} onChange={(event) => updateDraft({ specification: event.target.value })} onBlur={(event) => { const specification = normalizeItemDetailInput(event.target.value); if (specification !== draft.specification) updateDraft({ specification }); }} />
               </label>
               <label className="field">
                 <span>数量</span>

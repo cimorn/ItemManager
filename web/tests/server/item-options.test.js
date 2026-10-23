@@ -23,6 +23,17 @@ async function setup(project = fixture()) {
 }
 
 describe('optional item and catalog metadata validation', () => {
+  it('stores spaces in detail fields even when older clients submit middle dots', async () => {
+    const { service } = await setup();
+    const project = await service.getProject({ includePrivate: true });
+    Object.assign(project.items[0], { notes: '白色·S', specification: '印花·镂空', name: 'A·B', brand: 'Some·Brand' });
+    const saved = await service.saveProject(project, { includePrivate: true });
+    expect(saved.items[0]).toMatchObject({ notes: '白色 S', specification: '印花 镂空', name: 'A·B', brand: 'Some·Brand' });
+    const stored = (await service.backup()).project.items[0];
+    expect(stored.notes).toBe('白色 S');
+    expect(stored.specification).toBe('印花 镂空');
+  });
+
   it('bounds validation and projection work for a supported catalog with 32 locations per item', () => {
     const p = fixture(); p.locations = Array.from({ length: 3000 }, (_, i) => ({ id: `loc-${i}`, name: `Location ${i}`, level: 1, parentId: null }));
     p.items = Array.from({ length: 300 }, (_, i) => ({ id: `item-${i}`, categoryId: 'cat', locationIds: p.locations.slice(0, 32).map(n => n.id) }));

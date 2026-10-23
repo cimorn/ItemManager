@@ -48,7 +48,10 @@ function validateProject(input,{allowImagePaths=false}={}){
     const item={id:itemId,categoryId:id(value.categoryId,true),locationId:Object.hasOwn(value,'locationIds')?(assignedLocations[0]||null):id(value.locationId,true),...optionalBoolean(value,'isPackaged')};
     if(Object.hasOwn(value,'locationIds'))item.locationIds=assignedLocations;
     if(item.categoryId&&!categoryIds.has(item.categoryId)||assignedLocations.some(locationId=>!locationIds.has(locationId)))invalid();
-    for(const field of ITEM_FIELDS)item[field]=text(value[field],field==='notes'?16000:512);
+    for(const field of ITEM_FIELDS){
+      const clean=text(value[field],field==='notes'?16000:512);
+      item[field]=(field==='notes'||field==='specification')?clean.split(/[\s·]+/u).filter(Boolean).join(' '):clean;
+    }
     for(const field of ['createdAt','updatedAt'])if(value[field]!=null)item[field]=text(value[field],64);
     if(value.isPrivate!=null&&typeof value.isPrivate!=='boolean')invalid();item.isPrivate=value.isPrivate===true;
     if(!Array.isArray(value.tags||[])||(value.tags||[]).length>100)invalid();item.tags=[...new Set((value.tags||[]).map(x=>text(x,128)).filter(Boolean))];
