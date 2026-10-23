@@ -10,6 +10,7 @@ import {
   isItemPrivate,
   normalizeTagCodes
 } from '../../lib/project-data';
+import { normalizeItemDetail } from './item-detail-text';
 import { createEmptyItemDraft } from './item-gallery-selectors';
 import { useImageAccess } from '../web/ImageAccessContext';
 
@@ -236,6 +237,8 @@ export default function ItemEditorModal({
     const nextItem = {
       ...(mode === 'copy' ? {} : item),
       ...draft,
+      notes: normalizeItemDetail(draft.notes),
+      specification: normalizeItemDetail(draft.specification),
       locationIds: assignedLocationIds,
       locationId: assignedLocationIds[0] || null,
       tags: normalizeTagCodes(draft.tags)
@@ -354,7 +357,7 @@ export default function ItemEditorModal({
               </label>
               <label className="field">
                 <span>规格</span>
-                <input placeholder="白色·S" value={draft.notes} onChange={(event) => updateDraft({ notes: event.target.value })} />
+                <input placeholder="白色·S" value={draft.notes} onChange={(event) => updateDraft({ notes: event.target.value })} onBlur={(event) => { const notes = normalizeItemDetail(event.target.value); if (notes !== draft.notes) updateDraft({ notes }); }} />
               </label>
             </div>
 
@@ -365,7 +368,7 @@ export default function ItemEditorModal({
               </label>
               <label className="field">
                 <span>款式</span>
-                <input placeholder="印花·镂空" value={draft.specification} onChange={(event) => updateDraft({ specification: event.target.value })} />
+                <input placeholder="印花·镂空" value={draft.specification} onChange={(event) => updateDraft({ specification: event.target.value })} onBlur={(event) => { const specification = normalizeItemDetail(event.target.value); if (specification !== draft.specification) updateDraft({ specification }); }} />
               </label>
               <label className="field">
                 <span>数量</span>

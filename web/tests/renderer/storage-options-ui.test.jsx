@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -35,6 +35,20 @@ function editor(initialItem = item, extra = {}) {
 const locationRow = number => within(screen.getByRole('group', { name: `存放位置 ${number}` }));
 
 describe('compact NAS item controls', () => {
+  it('preserves spaces while typing and formats both detail fields on blur or direct save', async () => {
+    const { user, onSave } = editor({ ...item, notes: '', specification: '' });
+    const specification = screen.getByLabelText('规格');
+    const style = screen.getByLabelText('款式');
+    await user.type(specification, '白色 　S');
+    expect(specification).toHaveValue('白色 　S');
+    await user.tab();
+    expect(specification).toHaveValue('白色·S');
+    await user.type(style, '印花　镂空');
+    expect(style).toHaveValue('印花　镂空');
+    fireEvent.click(screen.getByRole('button', { name: '保存', exact: true }));
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ notes: '白色·S', specification: '印花·镂空' }));
+  });
+
   it('keeps existing field values under the renamed specification and style controls', async () => {
     const { user, onSave } = editor({ ...item, notes: '白色·S', specification: '印花·镂空', quantity: '1' });
     expect(screen.getByLabelText('规格')).toHaveValue('白色·S');

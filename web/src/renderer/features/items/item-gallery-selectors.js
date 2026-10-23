@@ -1,3 +1,4 @@
+import { normalizeItemDetail } from './item-detail-text';
 import { collectDescendantIds, getChildEntries, getItemLocationIds, getNodeLineage, normalizeTagCodes, toText } from '../../lib/project-data';
 
 export function formatCompactPath(path) {
@@ -9,9 +10,9 @@ export function formatCompactPath(path) {
 }
 
 export function buildItemCardView(item) {
-  const note = toText(item.notes);
+  const note = normalizeItemDetail(item.notes);
   const quantity = toText(item.quantity);
-  const metaLine = [item.brand, item.specification, quantity === '1' ? '' : quantity].map(toText).filter(Boolean).join(' · ');
+  const metaLine = [item.brand, normalizeItemDetail(item.specification), quantity === '1' ? '' : quantity].map(toText).filter(Boolean).join(' · ');
   const locationLine = [...new Set((item.locationPaths || [item.locationPath]).map(formatCompactPath).filter(Boolean))].join('；') || '未设置位置';
 
   return {
