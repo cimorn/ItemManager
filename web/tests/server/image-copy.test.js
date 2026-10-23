@@ -1,0 +1,82 @@
+// @vitest-environment node
+import { createRequire } from 'node:module';
+import { randomBytes } from 'node:crypto';
+import { afterEach, expect, it } from 'vitest';
+const require = createRequire(import.meta.url);
+const { createInventoryService } = require('../../server/inventory-service');
+const { createMemoryRepository } = require('../../server/repository');
+const { createMemoryObjectStore } = require('../../server/oss-store');
+const { createApp } = require('../../server/app');
+const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jM1sAAAAASUVORK5CYII=', 'base64');
+const cleanup = [];
+afterEach(async () => { for (const close of cleanup.splice(0).reverse()) await close(); });
+async function setup(isPrivate = false) {
+  const objects = createMemoryObjectStore();
+  const service = createInventoryService({ repository: createMemoryRepository(), objects, encryptionKey: randomBytes(32) });
+  cleanup.push(() => service.close());
+  await service.importProject({ meta:{}, categories:[{id:'normal',name:'数码',parentId:null}], locations:[], items:[{id:'source',name:'相机',categoryId:'normal',tags:[],isPrivate,imagePath:'source.png'}] }, { includePrivate:true, images:{'source.png':{bytes:png,mime:'image/png'}} });
+  const project = await service.getProject({includePrivate:true});
+  return { service, objects, source: project.items[0] };
+}
+it('copies only committed accessible photos and retains independent original bytes after deleting copy', async () => {
+  const {service, objects, source} = await setup();
+  const copied = await service.copyImage(source.imagePath);
+  expect(copied.imageId).not.toBe(source.imagePath);
+  await expect(service.readImage(copied.imageId)).rejects.toMatchObject({code:'NOT_FOUND'});
+  let project = await service.getProject();
+  project.items.push({...source,id:'copy',name:'相机副本',imagePath:copied.imageId});
+  project = await service.saveProject(project);
+  expect((await service.readImage(copied.imageId)).bytes).toEqual(png);
+  expect((await service.readImage(source.imagePath)).bytes).toEqual(png);
+  expect(objects.keys()).toHaveLength(2);
+  project.items = project.items.filter(item => item.id !== 'copy');
+  await service.saveProject(project);
+  expect((await service.readImage(source.imagePath)).bytes).toEqual(png);
+  expect(objects.keys()).toHaveLength(1);
+});
+it('does not copy private photos or unbound uploads while locked', async () => {
+  const {service, source} = await setup(true);
+  await expect(service.copyImage(source.imagePath)).rejects.toMatchObject({code:'NOT_FOUND'});
+  const copied = await service.copyImage(source.imagePath, {includePrivate:true});
+  await expect(service.copyImage(copied.imageId, {includePrivate:true})).rejects.toMatchObject({code:'NOT_FOUND'});
+  const publicProject = await service.getProject();
+  publicProject.items.push({id:'leak',name:'leak',tags:[],imagePath:copied.imageId});
+  await expect(service.saveProject(publicProject)).rejects.toMatchObject({code:'FORBIDDEN'});
+  const all = await service.getProject({includePrivate:true});
+  all.items.push({...source,id:'copy',imagePath:copied.imageId});
+  await service.saveProject(all,{includePrivate:true});
+  expect((await service.getProject()).items).toEqual([]);
+  expect((await service.readImage(copied.imageId,{includePrivate:true})).bytes).toEqual(png);
+});
+it('requires web login, origin and CSRF for copy, and invalidates late private copy responses', async () => {
+  const {service, source} = await setup(true);
+  let release, entered;
+  const started = new Promise(resolve => { entered = resolve; });
+  const realCopy = service.copyImage?.bind(service);
+  service.copyImage = async (...args) => {
+    const result = await realCopy(...args);
+    entered(); await new Promise(resolve => { release = resolve; }); return result;
+  };
+  const origin = 'https://storage.example.test';
+  const app = createApp({service,config:{password:'test-web',privacyPassword:'test-private',sessionSecret:'s'.repeat(48),publicOrigin:origin}});
+  const server = await new Promise(resolve => { const s = app.listen(0,'127.0.0.1',()=>resolve(s)); });
+  cleanup.push(() => new Promise(resolve => server.close(resolve)));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const post = (route,headers={},body) => fetch(base+route,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',...headers},...(body?{body:JSON.stringify(body)}:{})});
+  const endpoint = `/api/images/${source.imagePath}/copy`;
+  expect((await post(endpoint)).status).toBe(401);
+  const login = await post('/api/login',{}, {password:'test-web'});
+  const headers = {Cookie:login.headers.get('set-cookie').split(';')[0],'X-CSRF-Token':(await login.json()).csrfToken};
+  expect((await post(endpoint,{Cookie:headers.Cookie})).status).toBe(403);
+  expect((await post(endpoint,headers)).status).toBe(404);
+  const opened = await (await post('/api/privacy/open',headers,{password:'test-private'})).json();
+  const privateHeaders = {...headers,'X-Storage-Privacy':opened.privacyToken};
+  const pending = post(endpoint, privateHeaders);
+  await started;
+  await post('/api/privacy/close',privateHeaders);
+  release();
+  const response = await pending;
+  expect(response.status).toBe(403);
+  expect(response.headers.get('cache-control')).toContain('no-store');
+  expect(await response.text()).not.toContain('imageId');
+});

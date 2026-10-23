@@ -1,0 +1,22 @@
+{
+  "name": "@itemmanager/desktop",
+  "version": "26.1.1",
+  "private": true,
+  "description": "物品管理桌面客户端",
+  "author": "MCJ",
+  "type": "module",
+  "main": "src/client.cjs",
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "dev": "electron .",
+    "start": "electron .",
+    "test": "vitest run",
+    "build": "node scripts/build.cjs",
+    "build:windows": "node scripts/build.cjs"
+  },
+  "devDependencies": {
+    "electron": "^41.0.3",
+    "electron-builder": "^26.8.1",
+    "vitest": "^4.1.0"
+  }
+}

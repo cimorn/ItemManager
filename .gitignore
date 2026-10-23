@@ -1,7 +1,15 @@
 node_modules/
 dist/
 /data/
+/历史数据/
 .env
 .env.local
 .runtime/
 .pnpm-store/
+.worktrees/
+.storage-migration-backups/
+*.env
+.env.*
+!/.env.example
+/backups/
+.ossutil_checkpoint/

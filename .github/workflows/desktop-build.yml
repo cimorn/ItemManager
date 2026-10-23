@@ -1,0 +1,38 @@
+name: Desktop client
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'desktop/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/desktop-build.yml'
+  pull_request:
+    paths:
+      - 'desktop/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+      - run: pnpm --filter @itemmanager/desktop install --frozen-lockfile --ignore-scripts
+      - run: pnpm test:desktop
+      - run: node desktop/node_modules/electron/install.js
+      - run: pnpm desktop:build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ItemManager-Windows
+          path: dist/Desktop-*/*.exe
+          if-no-files-found: error

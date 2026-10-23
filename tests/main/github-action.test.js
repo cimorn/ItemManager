@@ -2,34 +2,14 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const projectRoot = path.join(__dirname, '..', '..');
-
-describe('GitHub Actions desktop release', () => {
-  it('builds and uploads the versioned English exe artifact', async () => {
-    const workflow = await fs.readFile(
-      path.join(projectRoot, '.github', 'workflows', 'desktop-release.yml'),
-      'utf8'
-    );
-
-    expect(workflow).toContain('contents: write');
-    expect(workflow).toContain('branches:');
-    expect(workflow).toContain('- main');
-    expect(workflow).toContain("- 'V*'");
-    expect(workflow).toContain('APP_RELEASE_DATE');
-    expect(workflow).toContain(`node -p "require('./package.json').version"`);
-    expect(workflow).toContain('ItemManager-V${{ env.APP_RELEASE_DATE }}.exe');
-    expect(workflow).toContain('actions/upload-artifact@v4');
-    expect(workflow).toContain('softprops/action-gh-release@v2');
-    expect(workflow).toContain('node electron/flatten-dist.js');
-  });
-
-  it('allows Electron dependency build scripts in CI', async () => {
-    const workspaceConfig = await fs.readFile(
-      path.join(projectRoot, 'pnpm-workspace.yaml'),
-      'utf8'
-    );
-
-    expect(workspaceConfig).toContain('electron: true');
-    expect(workspaceConfig).toContain('electron-winstaller: true');
+const root = path.resolve(import.meta.dirname, '../..');
+describe('container publication', () => {
+  it('checks runtime and fresh Compose deployment before publishing both architectures', async () => {
+    const workflow = await fs.readFile(path.join(root, '.github/workflows/docker-publish.yml'), 'utf8');
+    expect(workflow).toContain('needs: test');
+    expect(workflow).toContain('scripts/check-container.cjs');
+    expect(workflow).toContain('scripts/check-compose.cjs');
+    expect(workflow).toContain('linux/amd64,linux/arm64');
+    expect(workflow.indexOf('scripts/check-compose.cjs')).toBeLessThan(workflow.indexOf('name: Publish multi-platform image'));
   });
 });

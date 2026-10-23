@@ -1,0 +1,89 @@
+name: itemmanager
+services:
+  storage:
+    image: ${STORAGE_IMAGE:-ghcr.io/cimorn/itemmanager:latest}
+    restart: unless-stopped
+    init: true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m,uid=1000,gid=10
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    ports:
+      - "${STORAGE_BIND_ADDRESS:-127.0.0.1}:${STORAGE_BIND_PORT:-8094}:3000"
+    environment:
+      NODE_ENV: production
+      STORAGE_PORT: "3000"
+      STORAGE_HOST: 0.0.0.0
+      STORAGE_PREVIEW: "false"
+      STORAGE_PASSWORD: ${STORAGE_PASSWORD:?Set STORAGE_PASSWORD}
+      STORAGE_ALLOW_SHORT_PASSWORD: ${STORAGE_ALLOW_SHORT_PASSWORD:-false}
+      STORAGE_PRIVACY_PASSWORD: ${STORAGE_PRIVACY_PASSWORD:?Set STORAGE_PRIVACY_PASSWORD}
+      STORAGE_SESSION_SECRET: ${STORAGE_SESSION_SECRET:?Set STORAGE_SESSION_SECRET}
+      STORAGE_ENCRYPTION_KEY: ${STORAGE_ENCRYPTION_KEY:?Set STORAGE_ENCRYPTION_KEY}
+      STORAGE_PUBLIC_ORIGIN: ${STORAGE_PUBLIC_ORIGIN:-http://localhost:8094}
+      STORAGE_ALLOW_HTTP: ${STORAGE_ALLOW_HTTP:-true}
+      STORAGE_PRIVACY_TAGS: ${STORAGE_PRIVACY_TAGS:-}
+      STORAGE_MONGO_HOST: mongodb-storage:27017
+      STORAGE_MONGO_USERNAME: ${STORAGE_MONGO_USERNAME:?Set STORAGE_MONGO_USERNAME}
+      STORAGE_MONGO_PASSWORD: ${STORAGE_MONGO_PASSWORD:?Set STORAGE_MONGO_PASSWORD}
+      ALI_OSS_ACCESS_KEY_ID: ${ALI_OSS_ACCESS_KEY_ID:?Set ALI_OSS_ACCESS_KEY_ID}
+      ALI_OSS_ACCESS_KEY_SECRET: ${ALI_OSS_ACCESS_KEY_SECRET:?Set ALI_OSS_ACCESS_KEY_SECRET}
+      ALI_OSS_BUCKET: ${ALI_OSS_BUCKET:?Set ALI_OSS_BUCKET}
+      ALI_OSS_REGION: ${ALI_OSS_REGION:?Set ALI_OSS_REGION}
+      ALI_OSS_ENDPOINT: ${ALI_OSS_ENDPOINT:?Set ALI_OSS_ENDPOINT}
+    depends_on:
+      mongodb-storage:
+        condition: service_healthy
+    networks: [database, outbound]
+
+  mongodb-storage:
+    image: mongo:7.0
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${STORAGE_MONGO_ROOT_USERNAME:?Set STORAGE_MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${STORAGE_MONGO_ROOT_PASSWORD:?Set STORAGE_MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: storage
+      STORAGE_MONGO_USERNAME: ${STORAGE_MONGO_USERNAME:?Set STORAGE_MONGO_USERNAME}
+      STORAGE_MONGO_PASSWORD: ${STORAGE_MONGO_PASSWORD:?Set STORAGE_MONGO_PASSWORD}
+    volumes:
+      - storage-mongodb:/data/db
+    configs:
+      - source: mongo-init
+        target: /docker-entrypoint-initdb.d/10-storage.js
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --eval
+        - "const d=db.getSiblingDB('storage');if(!d.auth(process.env.STORAGE_MONGO_USERNAME,process.env.STORAGE_MONGO_PASSWORD))quit(1);quit(d.runCommand({ping:1}).ok?0:1)"
+      interval: 5s
+      timeout: 10s
+      retries: 24
+      start_period: 30s
+    networks: [database]
+
+configs:
+  mongo-init:
+    content: |
+      const username = process.env.STORAGE_MONGO_USERNAME;
+      const password = process.env.STORAGE_MONGO_PASSWORD;
+      if (!username || !password) throw new Error('Database credentials required');
+      db.getSiblingDB('storage').createUser({
+        user: username,
+        pwd: password,
+        roles: [{ role: 'readWrite', db: 'storage' }]
+      });
+
+volumes:
+  storage-mongodb:
+
+networks:
+  database:
+    internal: true
+  outbound:

@@ -2,90 +2,82 @@
 
 [中文](README.md)
 
-A local desktop app for personal item tracking. It stores items, images, categories, locations, tags, and quantities in the `data` folder next to the executable. No browser, server, or remote database is required.
+A self-hosted inventory app for desktop and mobile browsers. Manage photos, hierarchical categories and locations, multiple locations, tags, packaging flags, batch edits, duplicate items, and a private area.
 
-README screenshots use `docs/demo-data/project.json` demo data and do not include private item data.
+Runs on Linux servers, Docker Desktop, and NAS devices. Images support `amd64` and `arm64`. Deployment requires Docker Compose 2.23.1+ and a private Alibaba Cloud OSS bucket.
 
-![Items overview](docs/images/items-overview.png)
+## Deploy
 
-## Download
-
-Download the latest Windows build from [Releases](https://github.com/cimorn/ItemManager/releases).
-
-File name format:
-
-```text
-ItemManager-V26.08.09.exe
+```sh
+git clone https://github.com/cimorn/ItemManager.git
+cd ItemManager
+cp .env.example .env
 ```
 
-Put the exe in a fixed folder and run it. The app uses or creates a sibling `data` folder.
+PowerShell: use `Copy-Item .env.example .env`. Set both passwords and your OSS settings in `.env`. Generate and copy the remaining four secrets:
+
+```sh
+docker run --rm node:24-bookworm-slim node -e "const c=require('node:crypto');for(const k of ['STORAGE_SESSION_SECRET','STORAGE_ENCRYPTION_KEY','STORAGE_MONGO_ROOT_PASSWORD','STORAGE_MONGO_PASSWORD'])console.log(k+'='+c.randomBytes(32).toString('hex'))"
+docker compose up -d
+```
+
+Open [http://localhost:8094](http://localhost:8094).
+
+For phone access, set `STORAGE_BIND_ADDRESS=0.0.0.0` and `STORAGE_PUBLIC_ORIGIN` to the actual LAN URL. For a domain, use an HTTPS reverse proxy, configure that origin, and set `STORAGE_ALLOW_HTTP=false`.
 
 ## Usage
 
-1. Open `ItemManager-V26.08.09.exe`.
-2. Click `新增物品` to add an item.
-3. Fill in the name, brand, specification, quantity, category, and location.
-4. Choose an image on the computer, or click `手机拍照` and scan the QR code with a phone on the same LAN.
-5. A phone photo stays pending until you click `保存`, then it is written under `data/images/category/subcategory/file-name`.
-6. Add tags such as `BG-001`, `GJ-003`, or `SN-002`.
-7. Click `保存`; the app writes data to `data/project.json`.
+Enter the access password to manage items and photos. Combine category, location, tag, and packaging filters. Drag categories and locations to reorder them.
 
-![Item editor](docs/images/item-editor.png)
-
-## Data Folder
-
-Default layout:
-
-```text
-dist/
-  ItemManager-V26.08.09.exe
-  data/
-    project.json
-    images/
-      服装/鞋子/...
-      数码/设备/...
-    backups/
-    exports/
-```
-
-Most data is stored in `data/project.json`. Images are under `data/images`, backups under `data/backups`, and Excel exports under `data/exports`.
-
-The `docs/demo-data` folder only supports README screenshots. It does not replace your local `data` folder.
-
-## Categories And Locations
-
-Categories use two levels. Locations use up to three levels, so they can describe rooms, cabinets, boxes, or drawers.
-
-![Category manager](docs/images/category-manager.png)
-
-![Location manager](docs/images/location-manager.png)
-
-## Tags
-
-Tags are item or box labels. You can filter by category, location, and tag, then rename or delete tags in batches.
-
-![Tag manager](docs/images/tag-manager.png)
-
-## Features
-
-- Items: browse, search, filter, and edit items.
-- Categories: manage main categories and subcategories.
-- Locations: manage three-level storage locations.
-- Tags: view, filter, rename, and delete labels.
-- Batch edit: update categories, locations, or tags for multiple items.
-- File tools: new, open, save as, import Excel, export Excel, and export data backups.
-- Automatic backup: local backups are kept before saving.
+Click the app name at the top-left to unlock the private area. Locking or refreshing hides it again.
 
 ## Development
 
-```bash
-pnpm install
-pnpm test
-pnpm run build:desktop
+Requires Node.js 24+ and pnpm 11.
+
+```text
+web/        Web frontend, server, and web tests
+desktop/    Independent Electron client, icons, and build scripts
+scripts/    Docker runtime and backup/restore checks
 ```
 
-The packaged exe and `data` folder are flattened directly under `dist`.
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Development runs at `http://127.0.0.1:5173` with in-memory fixtures. Passwords: `preview-storage` and `preview-private`.
+
+```sh
+pnpm test
+pnpm build
+pnpm desktop:dev
+pnpm desktop:build
+```
+
+Web output: `web/dist/renderer/`. Windows output: `dist/Desktop-*/`. Configure the client URL in `desktop/src/policy.cjs`; see [client development](desktop/README.md).
+
+## Publish and update
+
+The web app and desktop client share a version in the form `YY.major.minor`. For example, `26.1.1` is the first minor release of the first major series in 2026. Before publishing, update `version` in all three `package.json` files at the root, in `web/`, and in `desktop/`, then push to `main`. Increment the version for each release.
+
+After tests and Docker deployment checks pass, GitHub Actions publishes `ghcr.io/cimorn/itemmanager:latest` and the matching version tag, such as `ghcr.io/cimorn/itemmanager:26.1.1`. The `latest` tag follows `main`. The desktop client has a separate build job; download its EXE, with the version in its filename, from that job's Artifacts.
+
+Update the web service from the deployment directory:
+
+```sh
+docker compose pull storage
+docker compose up -d --no-deps storage
+```
+
+Reopen the client after a web update. Rebuild and replace the EXE when the client itself changes.
+
+## Backups and recovery
+
+Back up **MongoDB, the OSS `Storage/` prefix, and the original `.env`**. Keep the volume and `STORAGE_ENCRYPTION_KEY` when updating.
+
+[Backup and restore commands (Chinese)](docs/backup.md) · [Image pinning and rollback](docs/docker-images.md)
 
 ## License
 
-MIT
+[MIT](LICENSE)

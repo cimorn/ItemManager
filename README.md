@@ -2,89 +2,82 @@
 
 [English](README.en.md)
 
-一个自己用的本地桌面物品管理软件。用来记录物品、图片、分类、位置、标签和数量，数据默认保存在软件同级的 `data` 目录，不需要浏览器、服务器或远程数据库。
+自托管物品管理工具，电脑和手机通过浏览器使用。支持图片、多级分类与位置、标签、包装标记、批量修改、复制新增和隐私区。
 
-README 截图使用 `docs/demo-data/project.json` 演示数据，不包含真实物品数据。
+支持 Linux 服务器、Docker Desktop、NAS 等 Docker 环境，提供 `amd64`、`arm64` 镜像。部署需要 Docker Compose 2.23.1+ 和阿里云 OSS 私有存储桶。
 
-![物品总览](docs/images/items-overview.png)
+## 部署
 
-## 下载
-
-到 [Releases](https://github.com/cimorn/ItemManager/releases) 下载最新版 Windows 程序。
-
-文件名格式：
-
-```text
-ItemManager-V26.08.09.exe
+```sh
+git clone https://github.com/cimorn/ItemManager.git
+cd ItemManager
+cp .env.example .env
 ```
 
-把 exe 放到固定文件夹运行。软件会在 exe 同级使用或创建 `data` 目录。
+PowerShell 使用 `Copy-Item .env.example .env`。编辑 `.env`，填写访问密码、隐私区密码和自己的 OSS 配置。生成其余四项密钥并填入：
 
-## 怎么用
-
-1. 打开 `ItemManager-V26.08.09.exe`。
-2. 点 `新增物品`，填写名称、品牌、规格、数量、分类和位置。
-3. 图片可以从电脑选择，也可以点 `手机拍照`，用同一局域网内的手机扫码拍摄并发送。
-4. 手机照片先显示为“待保存”，点 `保存` 后才会写入 `data/images/分类/子分类/文件名`。
-5. 给物品贴标签，例如 `BG-001`、`GJ-003`、`SN-002`。
-6. 点 `保存`，数据会写入本地 `data/project.json`。
-
-![编辑物品](docs/images/item-editor.png)
-
-## 数据位置
-
-默认目录结构：
-
-```text
-dist/
-  ItemManager-V26.08.09.exe
-  data/
-    project.json
-    images/
-      服装/鞋子/...
-      数码/设备/...
-    backups/
-    exports/
+```sh
+docker run --rm node:24-bookworm-slim node -e "const c=require('node:crypto');for(const k of ['STORAGE_SESSION_SECRET','STORAGE_ENCRYPTION_KEY','STORAGE_MONGO_ROOT_PASSWORD','STORAGE_MONGO_PASSWORD'])console.log(k+'='+c.randomBytes(32).toString('hex'))"
+docker compose up -d
 ```
 
-主要数据都在 `data/project.json`。图片在 `data/images`，备份在 `data/backups`，Excel 导出在 `data/exports`。
+打开 [http://localhost:8094](http://localhost:8094)。
 
-仓库里的 `docs/demo-data` 只用于 README 截图演示，不会替换你的本地 `data`。
+手机访问时，将 `STORAGE_BIND_ADDRESS` 改为 `0.0.0.0`，`STORAGE_PUBLIC_ORIGIN` 改为实际局域网地址。域名访问时使用 HTTPS 反向代理，填写对应域名并设置 `STORAGE_ALLOW_HTTP=false`。
 
-## 分类和位置
+## 使用
 
-分类固定两级，适合整理大类和子类。位置支持三级，适合记录房间、柜体、盒子或抽屉。
+输入访问密码后管理物品、上传图片，按分类、位置、标签和包装状态筛选。分类和位置支持拖动排序。
 
-![分类管理](docs/images/category-manager.png)
-
-![位置管理](docs/images/location-manager.png)
-
-## 标签
-
-标签用于给箱子或物品做编号。可以按分类、位置、标签搜索，也可以批量删除或改名。
-
-![标签管理](docs/images/tag-manager.png)
-
-## 常用功能
-
-- 物品：查看、搜索、筛选、编辑物品。
-- 分类：管理主分类和子分类。
-- 位置：管理三级存放位置。
-- 标签：查看、筛选、改名、删除已贴标签。
-- 批量修改：一次修改多个物品的分类、位置或标签。
-- 文件：新建、打开、另存、导入 Excel、导出 Excel、导出数据备份。
-- 自动备份：保存前会保留本地备份，避免误改数据。
+点击左上角“物品管理”输入隐私区密码；解锁后可设置隐私物品、分类和位置。锁定或刷新后重新隐藏。
 
 ## 开发
 
-```bash
-pnpm install
-pnpm test
-pnpm run build:desktop
+需要 Node.js 24+、pnpm 11。
+
+```text
+web/        网页前端、服务端和网页测试
+desktop/    独立 Electron 客户端、图标和打包脚本
+scripts/    Docker 运行与备份恢复检查
 ```
 
-打包后 exe 和 `data` 会展开在 `dist` 下。
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
+```
 
-## License
+网页开发地址为 `http://127.0.0.1:5173`，使用内存测试数据。访问密码为 `preview-storage`，隐私区密码为 `preview-private`。
 
-MIT
+```sh
+pnpm test
+pnpm build
+pnpm desktop:dev
+pnpm desktop:build
+```
+
+网页构建输出到 `web/dist/renderer/`，Windows 客户端输出到 `dist/Desktop-*/`。客户端连接地址在 `desktop/src/policy.cjs` 配置，详见 [客户端开发说明](desktop/README.md)。
+
+## 发布与更新
+
+网页和客户端使用统一版本号，格式为“年份后两位.大版本.小版本”，例如 `26.1.1`，表示 2026 年的第 1 个大版本、第 1 个小版本。发布前同步更新根目录、`web/`、`desktop/` 下三个 `package.json` 的 `version`，再推送到 `main`。每次发布递增版本号。
+
+GitHub Actions 测试并检查 Docker 部署后，自动发布 `ghcr.io/cimorn/itemmanager:latest` 和对应版本镜像，例如 `ghcr.io/cimorn/itemmanager:26.1.1`。`latest` 跟随 `main` 更新。客户端有独立构建任务，EXE 可从对应任务的 Artifacts 下载，文件名包含版本号。
+
+在部署目录更新网页：
+
+```sh
+docker compose pull storage
+docker compose up -d --no-deps storage
+```
+
+客户端只连接网页，网页更新后重新打开即可。客户端自身代码有变化时重新构建并替换 EXE。
+
+## 备份与恢复
+
+备份 **MongoDB、OSS 的 `Storage/` 目录、原 `.env`**。更新时保留原数据卷和 `STORAGE_ENCRYPTION_KEY`。
+
+[备份与恢复命令](docs/backup.md) · [固定镜像与回退](docs/docker-images.md)
+
+## 许可证
+
+[MIT](LICENSE)
