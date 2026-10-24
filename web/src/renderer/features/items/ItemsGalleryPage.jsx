@@ -165,10 +165,9 @@ export default function ItemsGalleryPage({
         />
 
         <div className="items-gallery-page__toolbar-side items-gallery-page__toolbar-side--actions">
-          <select className="item-sort-select" aria-label="物品排序" value={filters.sort || ''} onChange={(event) => onFilterChange?.({ sort: event.target.value })}>
-            <option value="">默认排序</option>
+          <select className="item-sort-select" aria-label="物品排序" value={filters.sort || 'updated-desc'} onChange={(event) => onFilterChange?.({ sort: event.target.value })}>
             <option value="created-desc">最近新增</option>
-            <option value="updated-desc">最近修改</option>
+            <option value="updated-desc">最近更新</option>
           </select>
           <select className="item-packaging-filter" aria-label="包装筛选" value={filters.packaging || ''} onChange={(event) => onFilterChange?.({ packaging: event.target.value })}>
             <option value="">包装</option>

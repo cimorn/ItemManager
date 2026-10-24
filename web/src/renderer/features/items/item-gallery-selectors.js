@@ -26,7 +26,8 @@ export function buildItemCardView(item) {
   };
 }
 
-export function sortItemGalleryItems(items = [], sort = '') {
+export function sortItemGalleryItems(items = [], sort = 'updated-desc') {
+  sort ||= 'updated-desc';
   if (sort !== 'created-desc' && sort !== 'updated-desc') return items;
   const timestamp = (value) => {
     if (value === null || value === undefined || value === '') return -Infinity;
