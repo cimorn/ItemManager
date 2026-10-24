@@ -176,7 +176,8 @@ describe('visible gallery sorting', () => {
   it('sorts newly created items first, keeping ties and unknown legacy dates in original order without mutating input', () => {
     expect(sortItemGalleryItems(items, 'created-desc').map(item => item.id)).toEqual(['new', 'same', 'old', 'legacy-a', 'legacy-b']);
     expect(items.map(item => item.id)).toEqual(['legacy-a', 'old', 'new', 'same', 'legacy-b']);
-    expect(sortItemGalleryItems(items, '')).toEqual(items);
+    expect(sortItemGalleryItems(items, '').map(item => item.id)).toEqual(['old', 'new', 'same', 'legacy-a', 'legacy-b']);
+    expect(sortItemGalleryItems(items).map(item => item.id)).toEqual(['old', 'new', 'same', 'legacy-a', 'legacy-b']);
   });
   it('sorts recently modified items first, using creation date when the modification date is absent or invalid', () => {
     expect(sortItemGalleryItems(items, 'updated-desc').map(item => item.id)).toEqual(['old', 'new', 'same', 'legacy-a', 'legacy-b']);
@@ -193,6 +194,7 @@ describe('visible gallery sorting', () => {
     const view = render(<Harness />);
     const order = () => [...view.container.querySelectorAll('.item-gallery-card')].map(card => card.getAttribute('aria-label'));
     const user = userEvent.setup();
+    expect(screen.getByLabelText('物品排序')).toHaveDisplayValue('最近更新');
     expect(order()).toEqual(['旧物品', '新物品']);
     await user.selectOptions(screen.getByLabelText('物品排序'), 'created-desc');
     expect(order()).toEqual(['新物品', '旧物品']);
