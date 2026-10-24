@@ -1,6 +1,6 @@
 # 镜像与回退
 
-镜像：`ghcr.io/cimorn/itemmanager`，支持 `linux/amd64` 和 `linux/arm64`。Docker 会选择与主机匹配的架构。
+镜像：`ghcr.io/cimorn/storage`，支持 `linux/amd64` 和 `linux/arm64`。Docker 会选择与主机匹配的架构。
 
 ## 部署与更新
 
@@ -19,7 +19,7 @@ docker compose ps
 在 `.env` 设置：
 
 ```dotenv
-STORAGE_IMAGE=ghcr.io/cimorn/itemmanager:26.1.1
+STORAGE_IMAGE=ghcr.io/cimorn/storage:26.1.6
 ```
 
 随后执行上面的更新命令。恢复旧镜像时，填回之前使用的标签。升级前备份数据库、OSS 图片和 `.env`。
@@ -31,9 +31,9 @@ STORAGE_IMAGE=ghcr.io/cimorn/itemmanager:26.1.1
 GitHub Actions 自动运行测试、检查 Docker 部署并发布 `latest` 和对应版本镜像，例如 `26.1.1`。`latest` 跟随 `main` 更新；需要固定版本或回退时使用具体版本标签。拉取请求只执行检查。
 
 ```sh
-docker build -t itemmanager:local .
-node scripts/check-container.cjs itemmanager:local
-node scripts/check-compose.cjs itemmanager:local
+docker build -t storage:local .
+node scripts/check-container.cjs storage:local
+node scripts/check-compose.cjs storage:local
 ```
 
 实际密码、密钥和数据只放在部署主机及私有存储中。

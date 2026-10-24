@@ -1,7 +1,7 @@
 name: itemmanager
 services:
   storage:
-    image: ${STORAGE_IMAGE:-ghcr.io/cimorn/itemmanager:latest}
+    image: ${STORAGE_IMAGE:-ghcr.io/cimorn/storage:latest}
     restart: unless-stopped
     init: true
     read_only: true

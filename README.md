@@ -61,7 +61,7 @@ pnpm desktop:build
 
 网页和客户端使用统一版本号，格式为“年份后两位.大版本.小版本”，例如 `26.1.1`，表示 2026 年的第 1 个大版本、第 1 个小版本。发布前同步更新根目录、`web/`、`desktop/` 下三个 `package.json` 的 `version`，再推送到 `main`。每次发布递增版本号。
 
-GitHub Actions 测试并检查 Docker 部署后，自动发布 `ghcr.io/cimorn/itemmanager:latest` 和对应版本镜像，例如 `ghcr.io/cimorn/itemmanager:26.1.1`。`latest` 跟随 `main` 更新。客户端有独立构建任务，EXE 可从对应任务的 Artifacts 下载，文件名包含版本号。
+GitHub Actions 测试并检查 Docker 部署后，自动发布 `ghcr.io/cimorn/storage:latest` 和对应版本镜像，例如 `ghcr.io/cimorn/storage:26.1.6`。`latest` 跟随 `main` 更新。客户端有独立构建任务，EXE 可从对应任务的 Artifacts 下载，文件名包含版本号。
 
 在部署目录更新网页：
 

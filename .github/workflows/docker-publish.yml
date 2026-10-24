@@ -67,7 +67,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/cimorn/itemmanager
+          images: ghcr.io/cimorn/storage
           tags: |
             type=raw,value=${{ steps.version.outputs.version }},priority=1000
             type=raw,value=latest,priority=100
