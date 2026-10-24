@@ -43,6 +43,36 @@ function mutation(session, body, extra = {}) {
   return { method: 'POST', headers: { Cookie: session.cookie, Origin: origin, 'X-CSRF-Token': session.csrfToken, ...extra }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) };
 }
 describe('NAS HTTP adapter', () => {
+  it('serves website icons before login without exposing inventory or other root files', async () => {
+    const dist = await mkdtemp(path.join(tmpdir(), 'storage-icons-'));
+    cleanup.push(() => rm(dist, { recursive: true, force: true }));
+    const ico = Buffer.from([0, 0, 1, 0, 1, 0]);
+    const png = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+    await writeFile(path.join(dist, 'favicon.ico'), ico);
+    await writeFile(path.join(dist, 'icon.png'), png);
+    await writeFile(path.join(dist, 'private.env'), 'not a public asset');
+    const { request, login } = await start({ staticDir: dist });
+
+    for (const [route, expected, type] of [
+      ['/favicon.ico', ico, /^image\/(?:x-icon|vnd\.microsoft\.icon)/],
+      ['/icon.png', png, /^image\/png/]
+    ]) {
+      const response = await request(route);
+      expect(response.status).toBe(200);
+      expect(response.headers.get('content-type')).toMatch(type);
+      expect(Buffer.from(await response.arrayBuffer())).toEqual(expected);
+      expect(response.headers.get('cache-control')).toContain('no-store');
+      expect(response.headers.get('set-cookie')).toBeNull();
+      const head = await request(route, { method: 'HEAD' });
+      expect(head.status).toBe(200);
+      expect(await head.text()).toBe('');
+    }
+    expect((await request('/api/project')).status).toBe(401);
+    expect((await request('/private.env')).status).toBe(404);
+    const session = await login();
+    expect((await request('/favicon.ico', { headers: { Cookie: session.cookie } })).status).toBe(200);
+  });
+
   it('caches only content-hashed public JS and CSS while HTML, API, images and errors remain no-store', async () => {
     const dist = await mkdtemp(path.join(tmpdir(), 'storage-cache-')); cleanup.push(() => rm(dist, { recursive: true, force: true }));
     await mkdir(path.join(dist, 'assets'));
