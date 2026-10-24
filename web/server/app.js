@@ -105,6 +105,9 @@ function createApp({ service, config, authOptions, staticDir = path.resolve(__di
     res.json(await service.importProject(project, { images, includePrivate: true }));
   });
   app.use('/api', (req, res) => res.status(404).json({ code: 'NOT_FOUND', error: '接口不存在' }));
+  for (const filename of ['favicon.ico', 'icon.png']) {
+    app.get(`/${filename}`, (req, res, next) => res.sendFile(path.join(staticDir, filename), { cacheControl: false, etag: false, lastModified: false }, (error) => error ? next(problem(404, 'NOT_FOUND', '图标不可用')) : undefined));
+  }
   app.get('/', (req, res, next) => res.sendFile(path.join(staticDir, 'index.html'), { cacheControl: false, etag: false, lastModified: false }, (error) => error ? next(problem(404, 'NOT_FOUND', '页面尚未构建')) : undefined));
   app.use('/assets', express.static(path.join(staticDir, 'assets'), {
     dotfiles: 'deny', etag: false, lastModified: false, cacheControl: false, fallthrough: true, index: false, redirect: false,

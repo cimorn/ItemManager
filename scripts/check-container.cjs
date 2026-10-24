@@ -21,6 +21,12 @@ const name = `storage-check-${process.pid}`;
   const page = await fetch(origin);
   assert.equal(page.status, 200);
   assert.match(await page.text(), /entry-login/);
+  for (const [file, type] of [['favicon.ico', /^image\/(?:x-icon|vnd\.microsoft\.icon)/], ['icon.png', /^image\/png/]]) {
+    const icon = await fetch(`${origin}/${file}`);
+    assert.equal(icon.status, 200);
+    assert.match(icon.headers.get('content-type'), type);
+    assert.ok((await icon.arrayBuffer()).byteLength > 0);
+  }
   assert.equal((await fetch(`${origin}/api/project`)).status, 401);
   console.log('Container passed: non-root, read-only, runtime modules, login page, protected inventory, excluded private paths.');
 })().catch(error => { console.error(error.message); process.exitCode = 1; }).finally(() => {

@@ -8,6 +8,7 @@ RUN --mount=type=cache,id=itemmanager-web-pnpm,target=/pnpm/store \
     pnpm --filter @itemmanager/web install --frozen-lockfile --ignore-scripts --store-dir=/pnpm/store
 COPY web/index.html web/vite.config.js ./web/
 COPY web/src ./web/src
+COPY web/public ./web/public
 COPY web/scripts/runtime-deps.cjs ./web/scripts/runtime-deps.cjs
 RUN pnpm --dir web build && node -e "require('./web/scripts/runtime-deps.cjs').vendorRuntimeDependencies({projectRoot:process.cwd()+'/web',targetDir:'/runtime/node_modules'}).catch(()=>process.exit(1))"
 
